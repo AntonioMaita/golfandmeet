@@ -12,8 +12,14 @@ exports.router = (function() {
     //Users routes
     apiRouter.route('/users/register/').post(usersCtrlRoute.register);
     apiRouter.route('/users/login/').post(usersCtrlRoute.login);
+
+
     apiRouter.route('/users/profile/').get(usersCtrlRoute.getUserProfile);
     apiRouter.route('/users/profile/').put(usersCtrlRoute.updateUserProfile);
+    apiRouter.route('/users/profile/').delete(usersCtrlRoute.deleteUserProfile);
+
+    // apiRouter.route('/users/follow/:id').put(usersCtrlRoute.follow);
+
 
     //Messages routes
     apiRouter.route('/messages/new/').post(messagesCtrlRoute.createMessage);

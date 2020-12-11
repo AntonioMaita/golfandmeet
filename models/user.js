@@ -6,7 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     bio: DataTypes.STRING,
     club: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN
+    isAdmin: DataTypes.BOOLEAN,
+    followers: DataTypes.INTEGER,
+    following: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {

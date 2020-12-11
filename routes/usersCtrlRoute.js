@@ -16,6 +16,8 @@ module.exports = {
         const password = req.body.password;
         const bio = req.body.bio;
         const club = req.body.club;
+        const followers = req.body.followers;
+        const following = req.body.following;
 
         if(email == null || username == null || password == null) {
             return res.status(400).json({'error': 'missing parameters'});
@@ -56,13 +58,15 @@ module.exports = {
               }
             },
             function(userFound, bcryptedPassword, done) {
-              const newUser = models.User.create({
+               models.User.create({
                 email: email,
                 username: username,
                 password: bcryptedPassword,
                 bio: bio,
                 club: club,
-                isAdmin: 0
+                isAdmin: 0,
+                followers: followers,
+                following: following
               })
               .then(function(newUser) {
                 done(newUser);
@@ -194,5 +198,96 @@ module.exports = {
               return res.status(500).json({ 'error': 'cannot fetch user profile' });
             }
           });
-        }
+        },
+
+        deleteUserProfile: function(req, res) {
+          // Getting auth header
+          const headerAuth  = req.headers['authorization'];
+          const userId      = jwtUtils.getUserId(headerAuth);
+      
+          // Params
+          const id = req.body.id;
+         
+      
+          asyncLib.waterfall([
+            function(done) {
+              models.User.findOne({
+                attributes: ['id'],
+                where: { id: userId }
+              }).then(function (userFound) {
+                done(null, userFound);
+              })
+              .catch(function(err) {
+                return res.status(500).json({ 'error': 'unable to verify user' });
+              });
+            },
+            function(userFound, done) {
+              if(userFound) {
+                userFound.destroy({
+                  id: (id ? id : userFound.id)
+                 
+                }).then(function() {
+                  done(userFound);
+                }).catch(function(err) {
+                  res.status(500).json({ 'error': 'cannot delete user' });
+                });
+              } else {
+                res.status(404).json({ 'error': 'user not found' });
+              }
+            },
+          ], function(userFound) {
+            if (userFound) {
+              return res.status(201).json(userFound);
+            } else {
+              return res.status(500).json({ 'error': 'cannot fetch user profile' });
+            }
+          });
+        },
+
+        // follow: function(req, res) {
+        //   // Getting auth header
+        //   const headerAuth  = req.headers['authorization'];
+        //   const userId      = jwtUtils.getUserId(headerAuth);
+      
+        //   // Params
+        //   const id = req.body.id;
+        //   const following = req.params.id;
+         
+      
+        //   asyncLib.waterfall([
+        //     function(done) {
+        //       models.User.findOne({
+        //         attributes: ['id'],
+        //         where: { id: userId,
+        //                    }
+        //       }).then(function (userFound) {
+        //         done(null, userFound);
+        //       })
+        //       .catch(function(err) {
+        //         return res.status(500).json({ 'error': 'unable to verify user' });
+        //       });
+        //     },
+        //     function(userFound, done) {
+        //       if(userFound) {
+        //         userFound.update({
+        //           following: (following ? following : userFound.following )
+                  
+        //         }).then(function() {
+        //           done(userFound);
+        //         }).catch(function(err) {
+        //           res.status(500).json({ 'error': 'cannot follow user' });
+        //         });
+        //       } else {
+        //         res.status(404).json({ 'error': 'user not found' });
+        //       }
+        //     },
+        //   ], function(userFound) {
+        //     if (userFound) {
+        //       return res.status(201).json(userFound);
+        //     } else {
+        //       return res.status(500).json({ 'error': 'cannot fetch user profile' });
+        //     }
+        //   });
+        // },
+              
 }

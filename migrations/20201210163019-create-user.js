@@ -9,23 +9,39 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       username: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       bio: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       club: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       isAdmin: {
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
+      followers: {
+        
+        type: Sequelize.INTEGER
+      },
+
+      following: {
+        
+        type: Sequelize.INTEGER
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

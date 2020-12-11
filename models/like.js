@@ -1,9 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Like = sequelize.define('Like', {
+  var Like = sequelize.define('Like', {
     messageId: {
       type: DataTypes.INTEGER,
       references: {
@@ -11,17 +8,17 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    userId : {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'User',
         key: 'id'
       }
-    }
-  },{});
-
-
+    },
+    isLike: DataTypes.INTEGER
+  }, {});
   Like.associate = function(models) {
+    // associations can be defined here
 
     models.User.belongsToMany(models.Message, {
       through: models.Like,
@@ -36,16 +33,14 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     models.Like.belongsTo(models.User, {
-      foreignKey: 'userID',
+      foreignKey: 'userId',
       as: 'user',
     });
 
     models.Like.belongsTo(models.Message, {
       foreignKey: 'messageId',
       as: 'message',
-    });   
-    
-
-  } ; 
+    });
+  };
   return Like;
 };
