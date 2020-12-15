@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
 const asyncLib = require('async');
+require('passport');
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const PASSWORD_REGEX = /^(?=.*\d).{4,8}$/;
@@ -134,16 +135,50 @@ module.exports = {
             }
           });
         },
+               
+        logout : function (req, res){
+          // Params
+          const headerAuth = req.headers['authorization'];
+           const userId = jwtUtils.getUserId(headerAuth);
+          let token = jwtUtils.parseAuthorization(headerAuth);
+          try { 
+            models.User.findOne({
+              where: {id: userId},
+              token: {token: token}
+
+
+            }).then((rUser)=>{
+              rUser.token = false;
+              rUser.save();
+              });
+            req.logout();
+            res.redirect("/");
+  
+            console.log(token, userId);
+
+          } catch(err) {}; 
+          
+
+
+          
+        },       
+        
+
+        
+       
         getUserProfile: function(req, res) {
           // Getting auth header
           const headerAuth  = req.headers['authorization'];
           const userId      = jwtUtils.getUserId(headerAuth);
+          const token = jwtUtils.parseAuthorization(headerAuth);
+          console.log(token);
+         
       
           if (userId < 0)
             return res.status(400).json({ 'error': 'wrong token' });
       
           models.User.findOne({
-            attributes: [ 'id', 'email', 'username', 'bio', 'club' ],
+            attributes: [ 'id', 'email', 'username', 'bio', 'club'],
             where: { id: userId }
           }).then(function(user) {
             if (user) {

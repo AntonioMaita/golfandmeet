@@ -5,6 +5,7 @@ const usersCtrlRoute = require('./routes/usersCtrlRoute');
 const messagesCtrlRoute = require('./routes/messagesCtrlRoute');
 const likesCtrlRoute = require('./routes/likesCtrlRoute');
 
+
 //Router
 exports.router = (function() {
     const apiRouter = express.Router();
@@ -12,6 +13,7 @@ exports.router = (function() {
     //Users routes
     apiRouter.route('/users/register/').post(usersCtrlRoute.register);
     apiRouter.route('/users/login/').post(usersCtrlRoute.login);
+    apiRouter.route('/users/logout/').get(usersCtrlRoute.logout);
 
 
     apiRouter.route('/users/profile/').get(usersCtrlRoute.getUserProfile);
