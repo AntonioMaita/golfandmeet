@@ -136,35 +136,42 @@ module.exports = {
           });
         },
                
-        logout : function (req, res){
-          // Params
-          const headerAuth = req.headers['authorization'];
-           const userId = jwtUtils.getUserId(headerAuth);
-          let token = jwtUtils.parseAuthorization(headerAuth);
-          try { 
-            models.User.findOne({
-              where: {id: userId},
-              token: {token: token}
-
-
-            }).then((rUser)=>{
-              rUser.token = false;
-              rUser.save();
-              });
-            req.logout();
-            res.redirect("/");
-  
-            console.log(token, userId);
-
-          } catch(err) {}; 
+        // logout : function (req,res){
+        //   // Params
+        //   let headerAuth = req.headers['authorization'];
+        //   const userId = jwtUtils.getUserId(headerAuth);
+        //   let token = jwtUtils.generateTokenForUser(headerAuth);
           
 
-
+        //   console.log(headerAuth, token, userId);
+        //   var delete_cookie = function(name) {headerAuth = name +'=;expiresIn=Thu, 01 Jan 1970 00:00:01 GMT;'; };
+        //   delete_cookie();
+        //   // asyncLib.waterfall([
+        //   //   function(done) {
+        //   //     models.User.findOne({
+        //   //       where: { id: userId }
+        //   //     })
+        //   //     .then(function(userFound) {
+        //   //       done(null, userFound);
+        //   //     })
+        //   //     .catch(function(err) {
+        //   //       return res.status(500).json({ 'error': 'unable to verify user' });
+        //   //     });
+        //   //   },
+            
+            
+        //   // ], function(userFound) {
+        //   //   if (userFound ==! userId) {
+        //   //     return res.status(201).json({
+        //   //       'userId': userFound.id,
+        //   //       'token': jwtUtils.changeGenerateTokenForUser(userFound)
+        //   //     });
+        //   //   } else {
+        //   //     return res.status(500).json({ 'error': 'cannot logout user' });
+        //   //   }
+        //   // });
           
-        },       
-        
-
-        
+        // },        
        
         getUserProfile: function(req, res) {
           // Getting auth header

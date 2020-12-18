@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 
-const JWT_SIGN_SECRET = '2b10ciQYoYTXdOo8RQWBSMOQZggxXV12hOzpuLQvf8YPG4ufyKMwmy2b10ZhnUrEQHegCyvSKuKpwCIeLi/LLO5HYsg217uH88DxqcRjXbHhPmS';
+const JWT_SIGN_SECRET = process.env.JWT_SIGN_SECRET;
 //exported functions
 
 module.exports = {
@@ -30,7 +30,17 @@ module.exports = {
         } catch(err) { }
       }
       return userId;
-  }
-
+  },
+  
+//   changeGenerateTokenForUser: function(userData){
+//     return jwt.sign({
+//         userId: userData.id,
+//         isAdmin:userData.isAdmin
+//     },
+//     JWT_SIGN_SECRET,
+//     {
+//         expiresIn: '0s'
+//     })
+// },
   
 }
